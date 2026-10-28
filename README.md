@@ -1,120 +1,133 @@
-# 🚦 Indian Traffic Sign Detection using YOLO11
+# Indian Traffic Sign Detection and Classification with YOLO11
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![YOLOv11](https://img.shields.io/badge/YOLO-v11-brightgreen.svg)](https://github.com/ultralytics/ultralytics)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-orange.svg)](https://pytorch.org/)
-[![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
-[![mAP50](https://img.shields.io/badge/mAP%4050-91.3%25-success.svg)](runs/detect/indian_traffic_signs_merged/results.png)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![YOLOv11](https://img.shields.io/badge/YOLO-v11-00FFFF.svg?style=flat)](https://github.com/ultralytics/ultralytics)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C.svg?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](LICENSE)
+[![mAP50](https://img.shields.io/badge/mAP%4050-91.28%25-success.svg?style=flat)](runs/detect/indian_traffic_signs_merged/results.png)
 
-A real-time deep learning system for detecting and classifying **104 distinct classes of Indian traffic and road signs** using **Ultralytics YOLO11s**. Designed for intelligent transportation systems (ITS), advanced driver assistance systems (ADAS), and autonomous navigation in diverse Indian road conditions.
-
----
-
-## 📌 Table of Contents
-- [Overview](#-overview)
-- [Performance & Benchmark](#-performance--benchmark)
-- [Training Results & Visualizations](#-training-results--visualizations)
-- [Dataset Overview](#-dataset-overview)
-- [Repository Structure](#-repository-structure)
-- [Installation](#-installation)
-- [Quick Start & Inference](#-quick-start--inference)
-- [Model Evaluation](#-model-evaluation)
-- [Training](#-training)
-- [Class Labels (104 Signs)](#-class-labels-104-signs)
-- [Citation & References](#-citation--references)
+A deep learning framework for real-time detection and classification of **104 distinct classes of Indian traffic and road signs** using **Ultralytics YOLO11s**. Designed for Intelligent Transportation Systems (ITS), Advanced Driver Assistance Systems (ADAS), and autonomous navigation under diverse Indian road conditions.
 
 ---
 
-## 🔍 Overview
-
-Indian roads present unique visual challenges for object detection: dense traffic, occlusions, varying lighting conditions, worn signboards, and unique regional sign variations. This repository delivers:
-- **YOLO11 Small Architecture (`yolo11s.pt`)**: Balanced high-speed inference with rich spatial accuracy suitable for edge devices and GPUs.
-- **104 Fine-Grained Classes**: Comprehensive coverage of mandatory (regulatory), cautionary (warning), and informatory traffic sign categories.
-- **Robust Multi-Source Dataset**: Aggregated and standardized from top Indian road sign datasets (Roboflow Universe, Kaggle, IRTSD, INTSD).
-- **Extensive Augmentations**: Trained with Mosaic, MixUp, Copy-Paste, HSV color jitter, and slight geometric transforms to withstand real-world road environments.
+## Table of Contents
+- [Introduction](#introduction)
+- [Key Features](#key-features)
+- [Performance Benchmarks](#performance-benchmarks)
+- [Training Visualizations and Metrics](#training-visualizations-and-metrics)
+- [Dataset Composition](#dataset-composition)
+- [Repository Structure](#repository-structure)
+- [Installation](#installation)
+- [Inference and Usage](#inference-and-usage)
+  - [Command Line Interface](#command-line-interface)
+  - [Python API](#python-api)
+- [Evaluation](#evaluation)
+- [Training Procedure](#training-procedure)
+- [Supported Traffic Sign Classes](#supported-traffic-sign-classes)
+- [References and Citations](#references-and-citations)
+- [License](#license)
 
 ---
 
-## 📊 Performance & Benchmark
+## Introduction
 
-The model achieved strong validation metrics on test splits:
+Road sign recognition in the Indian traffic ecosystem presents unique challenges due to complex background clutter, dense traffic flow, high variation in illumination, weathered signboards, and regional signage variations. 
 
-| Metric | Score |
+This repository provides an end-to-end pipeline covering dataset configuration, fine-tuning, evaluation, and production-ready inference using the YOLO11 small (`yolo11s`) architecture. It addresses both standard regulatory signs and localized signboards across 104 distinct categories.
+
+---
+
+## Key Features
+
+- **Optimized Model Architecture**: Employs YOLO11s for an optimal trade-off between floating-point operations (FLOPs), parameter efficiency, and mean average precision.
+- **Comprehensive Class Vocabulary**: Supports 104 categories encompassing mandatory (regulatory), cautionary (warning), and informatory traffic signs.
+- **Standardized Multi-Source Dataset**: Curated and merged from prominent traffic sign benchmarks (Roboflow Universe, Kaggle, IRTSD, INTSD).
+- **Data Augmentation Strategy**: Uses Mosaic, MixUp, Copy-Paste, HSV color shifts, and non-destructive spatial transformations tailored to preserve sign orientation and geometry.
+- **Flexible Inference Modes**: Built-in support for single images, video sequences, directory batches, and live camera streams.
+
+---
+
+## Performance Benchmarks
+
+The model was evaluated on held-out test splits. Key performance indicators are summarized below:
+
+| Metric | Value |
 | :--- | :--- |
 | **mAP@50 (Mean Average Precision @ IoU 0.50)** | **91.28%** |
 | **mAP@50-95 (Mean Average Precision @ IoU 0.50:0.95)** | **79.68%** |
-| **Precision** | **84.04%** |
-| **Recall** | **90.28%** |
+| **Precision (Mean Precision across classes)** | **84.04%** |
+| **Recall (Mean Recall across classes)** | **90.28%** |
 | **Input Image Resolution** | `640 x 640` |
-| **Model Architecture** | YOLO11 Small (`yolo11s`) |
+| **Model Size** | Small (`yolo11s`) |
+| **Batch Size** | 16 |
 
 ---
 
-## 📈 Training Results & Visualizations
+## Training Visualizations and Metrics
 
-### Metrics & Loss Curves
-Training progression over epochs depicting Box Loss, Class Loss, DFL Loss, Precision, Recall, and mAP metrics:
+### Loss and Metric Convergence
+The training progression across epochs illustrating bounding box loss, classification loss, distribution focal loss (DFL), precision, recall, and mAP metrics:
 
 ![Training Metrics](runs/detect/indian_traffic_signs_merged/results.png)
 
 ### Normalized Confusion Matrix
-Detailed per-class classification accuracy across major traffic sign groups:
+Detailed per-class prediction accuracy across categories:
 
-![Confusion Matrix](runs/detect/indian_traffic_signs_merged/confusion_matrix_normalized.png)
+![Normalized Confusion Matrix](runs/detect/indian_traffic_signs_merged/confusion_matrix_normalized.png)
 
-### Precision-Recall & F1 Curves
+### Diagnostic Curves
 - **Precision-Recall Curve**: [BoxPR_curve.png](runs/detect/indian_traffic_signs_merged/BoxPR_curve.png)
 - **F1-Confidence Curve**: [BoxF1_curve.png](runs/detect/indian_traffic_signs_merged/BoxF1_curve.png)
 
-### Sample Model Predictions
-Validation batch predictions demonstrating bounding box precision on challenging multi-sign road scenes:
+### Sample Detections
+Validation predictions demonstrating accurate bounding box localization and classification in multi-sign scenarios:
 
-![Sample Detections](runs/detect/indian_traffic_signs_merged/val_batch0_pred.jpg)
-
----
-
-## 🗂️ Dataset Overview
-
-The dataset unifies multiple Indian traffic sign datasets, categorized into 104 standardized classes. Data sources and references:
-- **Roboflow Universe**: [Indian Traffic Sign](https://universe.roboflow.com/sdi/indian-traffic-sign), [India Traffic Sign](https://universe.roboflow.com/college-opfvn/india-traffic-sign), [Indian Traffic Signboards](https://universe.roboflow.com/major-project-166na/indian-traffic-signboards)
-- **Kaggle**: [Indian Traffic Sign Dataset](https://www.kaggle.com/datasets/neelpratiksha/indian-traffic-sign-dataset)
-- **IEEE Dataport**: [IRTSD Dataset v1 (Indian Road Traffic Sign Detection)](https://ieee-dataport.org/documents/irtsd-datasetv1-indian-road-traffic-sign-detection-dataset)
-- **INTSD**: [Indian Traffic Sign Dataset](https://adityamishra-ml.github.io/INTSD/download.html)
-- See [dataset.txt](dataset.txt) for direct resource links.
-
-The dataset configuration file is located at `merged_dataset/data.yaml`.
+![Validation Batch Predictions](runs/detect/indian_traffic_signs_merged/val_batch0_pred.jpg)
 
 ---
 
-## 📁 Repository Structure
+## Dataset Composition
+
+The training data aggregates multiple public and research datasets standardized into YOLO format:
+- **Roboflow Universe**: Indian Traffic Sign benchmarks ([Link 1](https://universe.roboflow.com/sdi/indian-traffic-sign), [Link 2](https://universe.roboflow.com/college-opfvn/india-traffic-sign), [Link 3](https://universe.roboflow.com/major-project-166na/indian-traffic-signboards))
+- **Kaggle**: Indian Traffic Sign Dataset ([Link](https://www.kaggle.com/datasets/neelpratiksha/indian-traffic-sign-dataset))
+- **IEEE DataPort**: IRTSD Dataset v1 - Indian Road Traffic Sign Detection ([Link](https://ieee-dataport.org/documents/irtsd-datasetv1-indian-road-traffic-sign-detection-dataset))
+- **INTSD Benchmark**: Indian Traffic Sign Dataset ([Link](https://adityamishra-ml.github.io/INTSD/download.html))
+- Additional references and source links are cataloged in [`dataset.txt`](dataset.txt).
+
+The dataset configuration file containing paths and category labels is maintained in [`merged_dataset/data.yaml`](merged_dataset/data.yaml).
+
+---
+
+## Repository Structure
 
 ```
 Traffic_Signs_Detection/
-├── merged_dataset/
-│   └── data.yaml                  # YOLO dataset configuration (104 classes & paths)
-├── runs/
-│   └── detect/
-│       └── indian_traffic_signs_merged/
-│           ├── args.yaml          # Training hyperparameters and environment
-│           ├── results.csv        # Per-epoch training & validation metrics log
-│           ├── results.png        # Training loss & mAP graphs
-│           ├── confusion_matrix_normalized.png
-│           ├── BoxF1_curve.png
-│           ├── BoxPR_curve.png
-│           └── val_batch0_pred.jpg
-├── train.py                       # Training pipeline script
-├── predict.py                     # Inference script (Images, Video, Webcam)
-├── evaluate.py                    # Test set evaluation and metric generation
-├── requirements.txt               # Python package dependencies
-├── dataset.txt                    # Dataset citations and download links
-├── yolo11s.pt                     # YOLO11 Small model checkpoint
-├── .gitignore                     # Git ignore rules for archives & large files
-└── README.md                      # Project documentation
+|-- merged_dataset/
+|   `-- data.yaml                  # YOLO dataset configuration and class mapping
+|-- runs/
+|   `-- detect/
+|       `-- indian_traffic_signs_merged/
+|           |-- args.yaml          # Hyperparameters and training arguments
+|           |-- results.csv        # Tabulated epoch-by-epoch training logs
+|           |-- results.png        # Training loss and evaluation metric plots
+|           |-- confusion_matrix_normalized.png
+|           |-- BoxF1_curve.png
+|           |-- BoxPR_curve.png
+|           `-- val_batch0_pred.jpg
+|-- train.py                       # Model training script
+|-- predict.py                     # Inference script (Images, Video, Webcam)
+|-- evaluate.py                    # Evaluation script for test set validation
+|-- requirements.txt               # Project dependencies
+|-- dataset.txt                    # Dataset citations and source links
+|-- yolo11s.pt                     # YOLO11 Small model checkpoint
+|-- .gitignore                     # Git ignore configuration
+`-- README.md                      # Technical project documentation
 ```
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ### 1. Clone the Repository
 ```bash
@@ -122,15 +135,15 @@ git clone https://github.com/Adi02032006/Traffic_Signs_Detection.git
 cd Traffic_Signs_Detection
 ```
 
-### 2. Create and Activate Virtual Environment
+### 2. Set Up a Virtual Environment
 ```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
-
-# Linux / macOS
+# On Linux / macOS
 python3 -m venv venv
 source venv/bin/activate
+
+# On Windows
+python -m venv venv
+venv\Scripts\activate
 ```
 
 ### 3. Install Dependencies
@@ -141,30 +154,32 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Quick Start & Inference
+## Inference and Usage
 
-You can run predictions on images, video files, directories, or real-time webcam streams.
+### Command Line Interface
 
-### Run via Command Line
+Run inference on single images, videos, directories, or a live webcam feed using [`predict.py`](predict.py):
 
 ```bash
-# Predict on an image
+# Inference on a single image
 python predict.py --source path/to/image.jpg
 
-# Predict on a video file
+# Inference on a video file
 python predict.py --source path/to/video.mp4
 
-# Predict from live webcam (stream 0)
+# Real-time inference using a webcam (device index 0)
 python predict.py --source 0
 
-# Custom confidence and IoU thresholds
+# Adjust confidence and NMS IoU thresholds
 python predict.py --source path/to/image.jpg --conf 0.40 --iou 0.50
 
-# Specify custom weights path
+# Specify explicit weights file
 python predict.py --source path/to/image.jpg --weights yolo11s.pt
 ```
 
-### Run in Python
+### Python API
+
+Integrate the model directly into custom Python pipelines:
 
 ```python
 from ultralytics import YOLO
@@ -172,61 +187,69 @@ from ultralytics import YOLO
 # Load model checkpoint
 model = YOLO("yolo11s.pt")
 
-# Perform inference on an image
-results = model.predict(source="path/to/test.jpg", conf=0.35, save=True)
+# Execute inference
+results = model.predict(
+    source="path/to/image.jpg",
+    conf=0.35,
+    iou=0.45,
+    save=True
+)
 
-# Process detection bounding boxes
-for r in results:
-    for box in r.boxes:
-        cls_id = int(box.cls[0])
-        class_name = model.names[cls_id]
+# Extract and process detections
+for result in results:
+    for box in result.boxes:
+        class_id = int(box.cls[0])
+        class_name = model.names[class_id]
         confidence = float(box.conf[0])
-        coords = box.xyxy[0].tolist()
-        print(f"Detected {class_name} ({confidence:.2f}) at {coords}")
+        coordinates = box.xyxy[0].tolist()
+        print(f"Class: {class_name} | Confidence: {confidence:.2f} | Bounding Box: {coordinates}")
 ```
 
 ---
 
-## 🧪 Model Evaluation
+## Evaluation
 
-To evaluate model performance on the test split:
+To evaluate model checkpoints on the test partition:
 
 ```bash
-# Evaluate on test split (default)
+# Evaluate using default parameters
 python evaluate.py
 
-# Evaluate with custom weights and data config
+# Evaluate with custom weights and configuration
 python evaluate.py --weights yolo11s.pt --data merged_dataset/data.yaml --split test
 ```
 
-The script computes mAP@50, mAP@50-95, Precision, Recall, and outputs the top-performing and lowest-performing sign classes.
+The script prints aggregated summary statistics (mAP@50, mAP@50-95, Precision, Recall) followed by per-class average precision rankings.
 
 ---
 
-## 🏋️ Training
+## Training Procedure
 
-To train the model on your own hardware or retrain with new data:
+To train or fine-tune the model on your hardware:
 
 ```bash
 python train.py
 ```
 
-### Hyperparameters Overview
+### Key Hyperparameters
 - **Base Architecture**: `yolo11s.pt`
-- **Optimizer**: AdamW (`lr0=0.001`, `lrf=0.01`, cosine annealing)
-- **Batch Size**: 16 (optimized for 8GB VRAM like NVIDIA RTX 4060)
-- **Augmentations**: Mosaic (1.0), Mixup (0.1), Copy-Paste (0.1), Random Erasing (0.1)
+- **Optimizer**: AdamW (`lr0=0.001`, `lrf=0.01`, Cosine LR scheduling)
+- **Input Resolution**: `640 x 640`
+- **Batch Size**: 16 (configured for 8 GB VRAM)
+- **Data Augmentations**: Mosaic (1.0), MixUp (0.1), Copy-Paste (0.1), Random Erasing (0.1)
 - **Early Stopping**: Patience of 15 epochs
 
 ---
 
-## 🏷️ Class Labels (104 Signs)
+## Supported Traffic Sign Classes
+
+The model detects and classifies 104 categories of Indian traffic signs:
 
 <details>
-<summary>Click to view all 104 supported traffic sign classes</summary>
+<summary>Click to expand full class index (0 to 103)</summary>
 
 | ID | Class Name | ID | Class Name |
-|---|---|---|---|
+| :--- | :--- | :--- | :--- |
 | 0 | ACCIDENT | 52 | NO_ENTRY |
 | 1 | AIRPORT | 53 | NO_PARKING |
 | 2 | ALL_MOTOR_VEHICLE_PROHIBITED | 54 | NO_STOPPING_OR_STANDING |
@@ -284,13 +307,14 @@ python train.py
 
 ---
 
-## 📜 Citation & References
+## References and Citations
 
-If you use this work or the associated models in your research or project, please reference:
-- Ultralytics YOLO11: [Ultralytics GitHub](https://github.com/ultralytics/ultralytics)
-- Indian Traffic Sign Datasets: [INTSD](https://arxiv.org/pdf/2511.17183) & [IRTSD](https://ieee-dataport.org/documents/irtsd-datasetv1-indian-road-traffic-sign-detection-dataset)
+- **Ultralytics YOLO11**: [https://github.com/ultralytics/ultralytics](https://github.com/ultralytics/ultralytics)
+- **Indian Traffic Sign Dataset (INTSD)**: [ArXiv Preprint 2511.17183](https://arxiv.org/pdf/2511.17183)
+- **Indian Road Traffic Sign Detection (IRTSD)**: [IEEE DataPort Benchmark](https://ieee-dataport.org/documents/irtsd-datasetv1-indian-road-traffic-sign-detection-dataset)
 
 ---
 
-## 📄 License
-This project is open-source under the [MIT License](LICENSE).
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
