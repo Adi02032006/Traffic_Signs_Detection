@@ -1,0 +1,7 @@
+https://universe.roboflow.com/sdi/indian-traffic-sign
+https://universe.roboflow.com/college-opfvn/india-traffic-sign
+https://universe.roboflow.com/major-project-166na/indian-traffic-signboards
+https://www.kaggle.com/datasets/neelpratiksha/indian-traffic-sign-dataset
+https://ieee-dataport.org/documents/irtsd-datasetv1-indian-road-traffic-sign-detection-dataset
+https://adityamishra-ml.github.io/INTSD/download.html
+https://arxiv.org/pdf/2511.17183

@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Model Checkpoints (Keep only yolo11s.pt)
+*.pt
+!yolo11s.pt
+
+# Datasets and Archives (Large files > 4.5GB)
+*.zip
+*.tar
+*.tar.gz
+*.rar
+dataset/
+merged_dataset/train/
+merged_dataset/valid/
+merged_dataset/test/
+merged_dataset/**/*.jpg
+merged_dataset/**/*.png
+merged_dataset/**/*.txt
+!merged_dataset/data.yaml
+
+# Dataset annotations (raw dump without images)
+annotations.json
+folds.csv
+
+# Prediction Outputs and Log files
+runs/predict/
+*.log
+
+# Editor & OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
